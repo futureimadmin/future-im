@@ -1,42 +1,45 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { authApi } from '../apis/api';
 import './Auth.css';
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   });
+  const [error, setError] = useState('');
+  
+  useEffect(() => {
+    // Check for session expiration message in URL
+    const params = new URLSearchParams(location.search);
+    const message = params.get('message');
+    if (message) {
+      setError(message);
+    }
+  }, [location]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     try {
-      const response = await fetch('http://localhost:8084/vcom/api/v1/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        // Store the tokens and user data
-        localStorage.setItem('accessToken', data.accessToken);
-        localStorage.setItem('refreshToken', data.refreshToken);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        // Navigate to the landing page
-        navigate('/landing');
-      } else {
-        const error = await response.json();
-        alert(error.message || 'Login failed');
-      }
+      const response = await authApi.login(formData.username, formData.password);
+      const accessToken = response.data.accessToken;
+      const refreshToken = response.data.refreshToken;
+      const user = response.data.user;
+      
+      // Store the tokens and user data
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('user', JSON.stringify(user));
+      
+      // Navigate to the landing page
+      navigate('/landing');
     } catch (error) {
       console.error('Login error:', error);
-      alert('An error occurred during login');
+      setError(error.response?.data?.message || 'An error occurred during login');
     }
   };
 
@@ -51,6 +54,7 @@ const Login = () => {
     <div className="auth-container">
       <form className="auth-form" onSubmit={handleSubmit}>
         <h2>Login</h2>
+        {error && <div className="error-message">{error}</div>}
         <div className="form-group">
           <label htmlFor="username">Username or Email</label>
           <input

@@ -1,7 +1,6 @@
 package com.futureim.voicecommerce.gateway.filter;
 
 import com.futureim.voicecommerce.gateway.service.JwtService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
@@ -11,13 +10,13 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Component
-@RequiredArgsConstructor
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
 
     private final JwtService jwtService;
 
-    public AuthenticationFilter() {
+    public AuthenticationFilter(JwtService jwtService) {
         super(Config.class);
+        this.jwtService = jwtService;
     }
 
     @Override

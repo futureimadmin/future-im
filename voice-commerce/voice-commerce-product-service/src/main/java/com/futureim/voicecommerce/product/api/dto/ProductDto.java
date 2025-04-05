@@ -6,7 +6,9 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class ProductDto {
@@ -65,8 +67,9 @@ public class ProductDto {
             category.setId(dto.getCategoryId());
             product.setCategory(category);
         }
-        
-        product.setImageUrls(new ArrayList<>(dto.getImageUrls()));
+        Set<String> images = new HashSet<>();
+        images.addAll(dto.getImageUrls());
+        product.setImageUrls(images);
         
         return product;
     }
