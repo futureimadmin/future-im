@@ -1,0 +1,92 @@
+.services-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.services-container h1 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.banking-section,
+.ecommerce-section,
+.consulting-approach {
+  margin-bottom: 4rem;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #FFD700;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+h3 {
+  color: #333;
+  margin: 2rem 0 1rem;
+  font-size: 1.4rem;
+}
+
+h4 {
+  color: #666;
+  margin: 1rem 0;
+  font-size: 1.2rem;
+}
+
+.bian-domains ul,
+.bian-benefits ul,
+.ecommerce-services ul {
+  list-style: none;
+  padding: 0;
+}
+
+.bian-domains li,
+.ecommerce-services li {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.bian-benefits ul li {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.bian-benefits ul li:before {
+  content: "✓";
+  color: #FFD700;
+  position: absolute;
+  left: 0;
+}
+
+.approach-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.step {
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.step h4 {
+  color: #FFD700;
+  margin-bottom: 1rem;
+}
+
+p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
