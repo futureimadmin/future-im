@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../logo.jpeg';
-import './Header.css';
+import '../styles/global.css';
 
 const Header = () => {
   const [user, setUser] = useState(null);
@@ -21,36 +21,40 @@ const Header = () => {
   return (
     <header className="header">
       <div className="header-left">
-        <div className="logo">
-          <Link to="/">
-            <img src={logo} alt="Future IM Logo" />
-            <div className="company-name">Future IM</div>
-          </Link>
-        </div>
-        {user && (
-          <div className="welcome-message">
-            Welcome, {user.firstName}!
-          </div>
+        <Link to="/" className="logo">
+          <img src={logo} alt="Future IM Logo" />
+          <span className="logo-text">Future IM</span>
+        </Link>
+      </div>
+      <nav className="nav-links">
+        <Link to="/services">Services</Link>
+        <Link to="/offers">Offers</Link>
+        <Link to="/about">About</Link>
+        <Link to="/contact">Contact</Link>
+      </nav>
+      <div className="header-right">
+        {user ? (
+          <>
+            <div className="user-info">
+              Welcome, <span>{user.firstName}</span>
+            </div>
+            <Link 
+              to="/" 
+              className="auth-button"
+              onClick={() => {
+                localStorage.removeItem('user');
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+                window.location.reload();
+              }}
+            >
+              Logout
+            </Link>
+          </>
+        ) : (
+          <Link to="/login" className="auth-button">Login</Link>
         )}
       </div>
-      <nav className="nav-menu">
-        <ul>
-          <li><Link to="/services">Services</Link></li>
-          <li><Link to="/offers">Offers</Link></li>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/contact">Contact Us</Link></li>
-          {!user ? (
-            <li><Link to="/login" className="register-btn">Login</Link></li>
-          ) : (
-            <li><Link to="/" onClick={() => {
-              localStorage.removeItem('user');
-              localStorage.removeItem('accessToken');
-              localStorage.removeItem('refreshToken');
-              window.location.reload();
-            }} className="register-btn">Logout</Link></li>
-          )}
-        </ul>
-      </nav>
     </header>
   );
 };

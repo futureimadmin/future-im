@@ -1,5 +1,5 @@
 import React from 'react';
-import './Offers.css';
+import '../../styles/global.css';
 
 const Offers = () => {
   const offers = [
@@ -113,16 +113,16 @@ const Offers = () => {
               
               <div className="features-section">
                 <h4>Key Features</h4>
-                <ul>
+                <div className="approach-steps">
                   {offer.features.map((feature, index) => (
-                    <li key={index}>
+                    <div className="step" key={index}>
                       <div className="feature-header">
                         <strong>{feature.title}</strong>
                       </div>
                       <p>{feature.description}</p>
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             </div>
           </div>

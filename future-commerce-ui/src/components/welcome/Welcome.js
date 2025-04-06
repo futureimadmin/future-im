@@ -1,5 +1,5 @@
 import React from 'react';
-import './Welcome.css';
+import '../../styles/global.css';
 import ananthaImage from '../../images/Anantha.JPG';
 
 const Welcome = () => {

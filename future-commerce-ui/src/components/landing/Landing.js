@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { categoryApi, productApi } from '../apis/api';
-import './Landing.css';
+import React, { useState, useEffect, useRef } from 'react';
+import '../../styles/global.css';
 import microphoneIcon from '../../images/microphone.png';
+import { categoryApi, productApi } from '../apis/api';
+import { useNavigate } from 'react-router-dom';
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -220,16 +220,16 @@ const Landing = () => {
   };
 
   return (
-    <div className="landing-container">
-      <div className="category-sidebar">
-        <h2>Categories</h2>
-        {renderCategories(categories)}
-      </div>
+    <div className="page-container">
+      <div className="content-wrapper">
+        <div className="category-sidebar">
+          <h2>Categories</h2>
+          {renderCategories(categories)}
+        </div>
 
-      <div className="main-content">
-        <div className="top-section">
-          <div className="search-box">
-            <form onSubmit={handleSubmit}>
+        <div className="main-content">
+          <div className="search-section">
+            <form onSubmit={handleSubmit} className="search-box">
               <input
                 type="text"
                 value={searchText}
@@ -245,24 +245,21 @@ const Landing = () => {
               >
                 <img src={microphoneIcon} alt="Microphone" />
               </button>
+              {recordingStatus && (
+                <div className="recording-status">
+                  {recordingStatus}
+                </div>
+              )}
+              {audioUrl && (
+                <div className="audio-controls">
+                  <audio ref={audioRef} src={audioUrl} controls className="audio-player" />
+                  <button onClick={sendAudioToServer} className="send-button">
+                    Send Search Record
+                  </button>
+                </div>
+              )}
             </form>
           </div>
-
-          {recordingStatus && (
-            <div className="recording-status">
-              {recordingStatus}
-            </div>
-          )}
-
-          {audioUrl && (
-            <div className="audio-controls">
-              <audio ref={audioRef} src={audioUrl} controls className="audio-player" />
-              <button onClick={sendAudioToServer} className="send-button">
-                Send Search Record
-              </button>
-            </div>
-          )}
-        </div>
 
         {categoryPath.length > 0 && (
           <div className="breadcrumb">
@@ -321,7 +318,12 @@ const Landing = () => {
             Load More
           </button>
         )}
+        </div>
       </div>
+
+      <footer className="footer">
+        <p>&copy; 2025 Future IM. All rights reserved.</p>
+      </footer>
     </div>
   );
 };

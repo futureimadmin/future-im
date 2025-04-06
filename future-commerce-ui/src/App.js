@@ -23,6 +23,9 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/landing" element={<Landing />} />
       </Routes>
+      <footer className="footer">
+        <p>&copy; 2025 Future IM. All rights reserved.</p>
+      </footer>
     </div>
   );
 }
