@@ -1,5 +1,9 @@
 package com.futureim.voicecommerce.auth.config;
 
+import com.futureim.voicecommerce.auth.security.JwtAuthenticationFilter;
+import com.futureim.voicecommerce.auth.domain.service.JwtService;
+import com.futureim.voicecommerce.auth.security.CustomUserDetailsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,17 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import com.futureim.voicecommerce.auth.security.JwtAuthenticationFilter;
-import com.futureim.voicecommerce.auth.domain.service.JwtService;
-import com.futureim.voicecommerce.auth.security.CustomUserDetailsService;
-
-import lombok.RequiredArgsConstructor;
-
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -33,23 +26,11 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CustomUserDetailsService userDetailsService;
     private final JwtService jwtService;
+    private final CustomUserDetailsService userDetailsService;
 
     @Value("${security.permitted-urls}")
     private String securityPermittedUrls;
-
-    @Value("${cors.allowed-origins}")
-    private String allowedOrigins;
-
-    @Value("${cors.allowed-methods}")
-    private String allowedMethods;
-
-    @Value("${cors.allowed-headers}")
-    private String allowedHeaders;
-
-    @Value("${cors.exposed-headers}")
-    private String exposedHeaders;
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
@@ -60,7 +41,6 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(securityPermittedUrls.split(",")).permitAll()
                 .anyRequest().authenticated()
@@ -90,19 +70,5 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
-        configuration.setAllowedMethods(Arrays.asList(allowedMethods.split(",")));
-        configuration.setAllowedHeaders(Arrays.asList(allowedHeaders.split(",")));
-        configuration.setExposedHeaders(Arrays.asList(exposedHeaders.split(",")));
-        configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 }

@@ -9,92 +9,80 @@ spring:
     port: 6379
   cloud:
     gateway:
-      default-filters:
-        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
       routes:
         # Auth Service Routes (Port 8084)
-        - id: auth-service
+        - id: auth_route
           uri: http://localhost:8084
           predicates:
             - Path=/vcom/api/v1/auth/**
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
-                redis-rate-limiter.requestedTokens: 1
-            - name: CircuitBreaker
-              args:
-                name: authService
-                fallbackUri: forward:/fallback/auth
 
         # Product Service Routes (Port 8085)
-        - id: product-service
+        - id: product_route
           uri: http://localhost:8085
           predicates:
-            - Path=/vcom/api/v1/products/**, /vcom/api/v1/categories/**
+            - Path=/vcom/api/v1/products/**
           filters:
             - name: AuthenticationFilter
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 20
-                redis-rate-limiter.burstCapacity: 40
-                redis-rate-limiter.requestedTokens: 1
-            - name: CircuitBreaker
-              args:
-                name: productService
-                fallbackUri: forward:/fallback/product
 
-        # Cart Service Routes (Port 8082)
-        - id: cart-service
-          uri: http://localhost:8082
+        # Category Service Routes (Port 8085)
+        - id: category_route
+          uri: http://localhost:8085
           predicates:
-            - Path=/vcom/api/v1/cart/**
+            - Path=/vcom/api/v1/categories/**
           filters:
             - name: AuthenticationFilter
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 15
-                redis-rate-limiter.burstCapacity: 30
-                redis-rate-limiter.requestedTokens: 1
-            - name: CircuitBreaker
-              args:
-                name: cartService
-                fallbackUri: forward:/fallback/cart
 
-        # Order Service Routes (Port 8081)
-        - id: order-service
-          uri: http://localhost:8081
+        # Order Service Routes (Port 8086)
+        - id: order_route
+          uri: http://localhost:8086
           predicates:
             - Path=/vcom/api/v1/orders/**
           filters:
             - name: AuthenticationFilter
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 15
-                redis-rate-limiter.burstCapacity: 30
-                redis-rate-limiter.requestedTokens: 1
-            - name: CircuitBreaker
-              args:
-                name: orderService
-                fallbackUri: forward:/fallback/order
 
-        # Search Service Routes (Port 8080)
-        - id: search-service
-          uri: http://localhost:8080
+        # Payment Service Routes (Port 8087)
+        - id: payment_route
+          uri: http://localhost:8087
+          predicates:
+            - Path=/vcom/api/v1/payments/**
+          filters:
+            - name: AuthenticationFilter
+
+        # Cart Service Routes (Port 8088)
+        - id: cart_route
+          uri: http://localhost:8088
+          predicates:
+            - Path=/vcom/api/v1/cart/**
+          filters:
+            - name: AuthenticationFilter
+
+        # User Service Routes (Port 8089)
+        - id: user_route
+          uri: http://localhost:8089
+          predicates:
+            - Path=/vcom/api/v1/users/**
+          filters:
+            - name: AuthenticationFilter
+
+        # Search Service Routes (Port 8090)
+        - id: search_route
+          uri: http://localhost:8090
           predicates:
             - Path=/vcom/api/v1/search/**
           filters:
             - name: AuthenticationFilter
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 20
-                redis-rate-limiter.burstCapacity: 40
-                redis-rate-limiter.requestedTokens: 1
-            - name: CircuitBreaker
-              args:
-                name: searchService
-                fallbackUri: forward:/fallback/search
+
+        # Inventory Service Routes (Port 8091)
+        - id: inventory_route
+          uri: http://localhost:8091
+          predicates:
+            - Path=/vcom/api/v1/inventory/**
+          filters:
+            - name: AuthenticationFilter
 
 eureka:
   client:
@@ -110,26 +98,17 @@ resilience4j:
     configs:
       default:
         slidingWindowSize: 10
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10000
+        minimumNumberOfCalls: 5
         permittedNumberOfCallsInHalfOpenState: 3
-    instances:
-      authService:
-        baseConfig: default
-      productService:
-        baseConfig: default
-      cartService:
-        baseConfig: default
-      orderService:
-        baseConfig: default
-      searchService:
-        baseConfig: default
+        waitDurationInOpenState: 5s
+        failureRateThreshold: 50
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,circuitbreakers
+        include: health,info,metrics
+
 
 jwt:
   secret: ${JWT_SECRET:TmV3U2VjdXJlS2V5Rm9yVm9pY2VDb21tZXJjZUdhdGV3YXlXaXRoTWluaW11bTI1NkJpdHNGb3JITUFDU0hBMjU2QWxnb3JpdGht}

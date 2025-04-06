@@ -22,6 +22,11 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
+            // Skip authentication for OPTIONS requests
+            if (exchange.getRequest().getMethod() == org.springframework.http.HttpMethod.OPTIONS) {
+                return chain.filter(exchange);
+            }
+
             if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
                 return onError(exchange, HttpStatus.UNAUTHORIZED);
             }
