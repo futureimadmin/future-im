@@ -31,12 +31,12 @@ const Login = () => {
       const user = response.data.user;
       
       // Store the tokens and user data
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-      localStorage.setItem('user', JSON.stringify(user));
-      
-      // Navigate to the landing page
-      navigate('/landing');
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('accessToken', response.data.accessToken);
+      localStorage.setItem('refreshToken', response.data.refreshToken);
+      // Dispatch a custom event to notify header
+      window.dispatchEvent(new Event('userLogin'));
+      navigate('/marketplace');
     } catch (error) {
       console.error('Login error:', error);
       setError(error.response?.data?.message || 'An error occurred during login');

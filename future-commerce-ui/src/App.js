@@ -4,10 +4,11 @@ import Header from './components/Header';
 import Welcome from './components/welcome/Welcome';
 import About from './components/about/About';
 import Services from './components/services/Services';
-import Offers from './components/products/Offers';
+import Offers from './components/offers/Offers';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
-import Landing from './components/landing/Landing';
+import Marketplace from './components/marketplace/Marketplace';
+import Profile from './components/profile/Profile';
 import './App.css';
 
 function App() {
@@ -21,7 +22,8 @@ function App() {
         <Route path="/offers" element={<Offers />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/landing" element={<Landing />} />
+        <Route path="/marketplace" element={<Marketplace />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
       <footer className="footer">
         <p>&copy; 2025 Future IM. All rights reserved.</p>
