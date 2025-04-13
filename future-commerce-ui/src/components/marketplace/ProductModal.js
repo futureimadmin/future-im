@@ -5,6 +5,20 @@ import './ProductModal.css';
 const ProductModal = ({ product, onClose, onAddToCart, onBuyNow }) => {
   if (!product) return null;
 
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Add to cart clicked for product:', product.name);
+    onAddToCart(product);
+  };
+
+  const handleBuyNow = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Buy now clicked for product:', product.name);
+    onBuyNow(product);
+  };
+
   return (
     <div className="product-modal-overlay" onClick={onClose}>
       <div className="product-modal" onClick={e => e.stopPropagation()}>
@@ -76,10 +90,10 @@ const ProductModal = ({ product, onClose, onAddToCart, onBuyNow }) => {
             <div className="product-actions">
               {product.stockQuantity > 0 ? (
                 <>
-                  <button className="add-to-cart-button" onClick={() => onAddToCart(product)}>
+                  <button className="add-to-cart-button" onClick={handleAddToCart}>
                     Add to Cart
                   </button>
-                  <button className="buy-now-button" onClick={() => onBuyNow(product)}>
+                  <button className="buy-now-button" onClick={handleBuyNow}>
                     Buy Now
                   </button>
                 </>

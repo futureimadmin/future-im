@@ -1,33 +1,42 @@
 .marketplace {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: calc(100vh - var(--header-height));
+  overflow-y: auto;
+  padding: 3px 24px;
+  margin-top: var(--header-height);
+  background: #f8f9fa;
 }
 
 .marketplace-search {
-  padding: 24px;
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  margin-bottom: 24px;
+  background: linear-gradient(135deg, #2D3748, #FFD700);
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  margin-bottom: 6px;
+  width: 100%;
+  padding: 6px;
 }
 
 .search-box {
   display: flex;
-  gap: 12px;
+  gap: 1px;
   max-width: 800px;
   margin: 0 auto;
   align-items: center;
+  width: 100%;
 }
 
 .search-box input {
   flex: 1;
-  height: var(--button-height);
+  height: 40px;
   padding: 0 16px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 14px;
   transition: border-color 0.2s;
+  min-width: 150px;
+  outline: none;
 }
 
 .search-box input:focus {
@@ -35,9 +44,9 @@
   border-color: var(--primary-color);
 }
 
-.search-button {
-  height: var(--button-height);
-  padding: 0 var(--button-padding);
+.search-box button[type="submit"] {
+  height: 40px;
+  padding: 0 24px;
   background-color: var(--primary-color);
   color: #333;
   border: none;
@@ -45,7 +54,8 @@
   cursor: pointer;
   transition: background-color 0.2s;
   font-size: var(--button-font-size);
-  font-weight: 500;
+  font-weight: bold;
+  white-space: nowrap;
 }
 
 .search-button:hover {
@@ -67,8 +77,8 @@
 }
 
 .record-button img {
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
   opacity: 0.7;
   transition: opacity 0.2s;
 }
@@ -90,7 +100,7 @@
   display: flex;
   flex: 1;
   gap: 24px;
-  padding: 24px;
+  height: 100%;
 }
 
 .category-sidebar {
@@ -243,27 +253,38 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
+  background: white;
   padding: 8px 16px;
-  background: #fff;
   border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .breadcrumb button {
   background: none;
   border: none;
-  padding: 4px 8px;
-  cursor: pointer;
   color: #666;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.breadcrumb button:hover {
+  color: var(--primary-color);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .breadcrumb button.active {
-  color: #1976d2;
+  color: var(--primary-color);
   font-weight: 500;
+  background: rgba(255, 215, 0, 0.1);
 }
 
 .separator {
-  color: #999;
+  color: #ccc;
+  margin: 0 4px;
 }
 
 .product-grid {

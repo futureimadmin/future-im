@@ -35,7 +35,16 @@ const Marketplace = () => {
   }, []);
 
   const handleAddToCart = useCallback((product) => {
-    setCartItems(prev => [...prev, product]);
+    console.log('Adding to cart:', product);
+    setCartItems(prev => {
+      const newItems = [...prev, product];
+      // Store in localStorage
+      localStorage.setItem('cart', JSON.stringify(newItems));
+      // Dispatch cartUpdated event
+      window.dispatchEvent(new Event('cartUpdated'));
+      console.log('Updated cart items:', newItems);
+      return newItems;
+    });
   }, []);
 
   const handleBuyNow = useCallback((product) => {
@@ -297,14 +306,14 @@ const Marketplace = () => {
           {recordingStatus && (
             <div className="recording-status">
               {recordingStatus}
-            </div>
-          )}
-          {audioUrl && (
-            <div className="audio-controls">
-              <audio ref={audioRef} src={audioUrl} controls className="audio-player" />
-              <button onClick={sendAudioToServer} className="send-button">
-                Send Search Record
-              </button>
+              {audioUrl && (
+                <div className="audio-controls">
+                  <audio ref={audioRef} src={audioUrl} controls className="audio-player" />
+                  <button onClick={sendAudioToServer} className="send-button">
+                    Send Search Record
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </form>
